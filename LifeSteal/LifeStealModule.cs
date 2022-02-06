@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections;
-using UnityEngine;
-using ThunderRoad;
+﻿using ThunderRoad;
 
 namespace LifeSteal
 {
