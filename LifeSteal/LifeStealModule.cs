@@ -10,6 +10,4 @@ namespace LifeSteal
             item.gameObject.AddComponent<LifeSteal>();
         }
     }
-
-    
 }

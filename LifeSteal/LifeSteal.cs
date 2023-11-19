@@ -27,19 +27,22 @@ namespace LifeSteal
         private void CollisionEventHandler(CollisionInstance collisionInstance)
         {
 			bool enabled = base.enabled;
-			if (enabled)
+			bool flag = collisionInstance.damageStruct.hitRagdollPart;
+			if (enabled && flag)
 			{
-				bool flag = collisionInstance.damageStruct.hitRagdollPart;
-				if (flag)
+				Creature c = collisionInstance.targetCollider.GetComponentInParent<Creature>();
+
+				RagdollPart.Type type = collisionInstance.damageStruct.hitRagdollPart.type;
+				float damage = collisionInstance.damageStruct.damage;
+
+				if (type == RagdollPart.Type.Torso && c != handlerCreature)
 				{
-					Creature c = collisionInstance.targetCollider.GetComponentInParent<Creature>();
-					bool flag2 = collisionInstance.damageStruct.damage > 1f && c != handlerCreature;
-					if (flag2)
-					{
-						float damage = collisionInstance.damageStruct.damage;
-						float num = damage * (lifeStealPercent / 100f);
-						handlerCreature.currentHealth = Mathf.Clamp(handlerCreature.currentHealth + num, 0f, handlerCreature.maxHealth);
-					}
+					Player.local.creature.Heal(damage * 0.4f);
+				}
+				else if(c != handlerCreature)
+				{
+					float num = damage * (lifeStealPercent / 100f);
+					Player.local.creature.currentHealth = Mathf.Clamp(handlerCreature.currentHealth + num, 0f, handlerCreature.maxHealth);
 				}
 			}
 		}
@@ -83,7 +86,6 @@ namespace LifeSteal
 				bool flag2 = Time.time - startTime > 1f;
 				if (flag2)
 				{
-					
 					bool flag3 = handlerCreature.currentHealth > 1f;
 					if (flag3)
 					{
@@ -103,20 +105,13 @@ namespace LifeSteal
 				}
 			}
 		}
-
          
 		public Item item;
-
 		public float dmgPercentPerSec = 0.8f;
-
 		public float lifeStealPercent = 30.0f;
-
 		public Creature handlerCreature;
-
 		protected RagdollHand rightInteractor;
-
 		protected RagdollHand leftInteractor;
-
 		private float startTime;
 	}
 }
